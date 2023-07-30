@@ -1,0 +1,5 @@
+https://stackoverflow.com/questions/58717563/read-the-data-from-the-xlsx-excel-file-and-arrange-mange-in-array-or-create-a
+
+https://www.phpclasses.org/package/6279-PHP-Parse-and-retrieve-data-from-Excel-XLS-files.html
+
+https://github.com/shuchkin/simplexlsx
