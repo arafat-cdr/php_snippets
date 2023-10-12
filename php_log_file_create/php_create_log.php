@@ -1,12 +1,19 @@
 <?php
 
-$logFilePath = storage_path('logs/cron_log.txt');
-# or
-// $logFilePath = __DIR__."storage/public/logs/cron_log.txt";
+// Specify the path to your log file
+$logFilePath = __DIR__.'/log.txt';
 
-file_put_contents($logFilePath, $message . PHP_EOL, FILE_APPEND);
+// Check if the file exists, and if not, create it
+if (!file_exists($logFilePath)) {
+    touch($logFilePath); // Create an empty file
+}
 
-$message = 'cron called at ' . now()->toDateTimeString();
+$date_time = "Date Time Now: ".date("Y-m-d H:i:s")."\n";
+$timestamp = microtime(true);
+$milliseconds = round(($timestamp - floor($timestamp)) * 1000); // Extract milliseconds
 
-// Open the log file in append mode and write the message
-file_put_contents($logFilePath, $message . PHP_EOL, FILE_APPEND);
+$dateWithMilliseconds = date('Y-m-d H:i:s') . '.' . str_pad($milliseconds, 3, '0', STR_PAD_LEFT);
+
+$str_to_log = $date_time.$dateWithMilliseconds;
+
+file_put_contents($logFilePath, $str_to_log . PHP_EOL, FILE_APPEND);
