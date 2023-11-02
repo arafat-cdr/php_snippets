@@ -128,7 +128,23 @@ function build_4_level_cat($arr){
     return $new_arr;
 }
 
+# We Need To Remove Empty Arr to Fix Empty Ul 
+
+function removeEmptyChildArrays(&$array) {
+    foreach ($array as $key => &$value) {
+        if (is_array($value)) {
+            removeEmptyChildArrays($value);
+            if (empty($value)) {
+                unset($array[$key]);
+            }
+        }
+    }
+}
+
+
 function build_4_ul_li_cat($new_arr){
+
+    // pr( $new_arr );
 
     $ul_li = '';
     if( $new_arr ){
@@ -139,7 +155,7 @@ function build_4_ul_li_cat($new_arr){
             $ul_li .= "\n\t<li>";
             $ul_li .= $level_1;
 
-            if( $v['child'] ){
+            if( isset( $v['child'] ) ){
 
                  $ul_li .= "\n\t\t<ul>";
 
@@ -150,11 +166,13 @@ function build_4_ul_li_cat($new_arr){
                     $ul_li .= "\n\t\t\t<li>";
                     $ul_li .= $level_2;
 
-                    if( $vv['child'] ){
+                    if( isset( $vv['child'] ) ){
 
                         $ul_li .= "\n\t\t\t\t<ul>";
-
+                        // pr( $vv['child'] );
                         foreach( $vv['child'] as $kkk => $vvv ){
+
+                            // pr( $vvv['data'] );
 
                             $level_3 = $vvv['data'];
 
@@ -163,7 +181,7 @@ function build_4_ul_li_cat($new_arr){
                                 $ul_li .= "\n\t\t\t\t\t<li>";
                                 $ul_li .= $level_3;
 
-                                if( $vvv['child'] ){
+                                if( isset( $vvv['child'] ) ){
                                     $ul_li .= "\n\t\t\t\t\t\t<ul>";
                                     
                                     foreach( $vvv['child'] as $kkkk => $vvvv ){
@@ -217,6 +235,20 @@ function build_4_ul_li_cat($new_arr){
 }
 
 
+function removeEmptyValuesAndSubarrays($array){
+   foreach($array as $k=>&$v){
+        if(is_array($v)){
+            $v=removeEmptyValuesAndSubarrays($v);  // filter subarray and update array
+            if(!sizeof($v)){ // check array count
+                unset($array[$k]);
+            }
+        }elseif(!strlen($v)){  // this will handle (int) type values correctly
+            unset($array[$k]);
+        }
+   }
+   return $array;
+}
+
 $arr = array(
     array('Akcesoria', 'Kluczyki', 'Brelok do kluczy', ''),
     array('Akcesoria', 'Kluczyki', 'Etui na Kluczyk', ''),
@@ -233,6 +265,12 @@ $arr = array(
 $res = build_4_level_cat( $arr );
 
 // pr( $res );
+
+$res = removeEmptyValuesAndSubarrays($res);
+
+// pr($res);
+
+// die("die here");
 
 $ul_li = build_4_ul_li_cat( $res );
 
