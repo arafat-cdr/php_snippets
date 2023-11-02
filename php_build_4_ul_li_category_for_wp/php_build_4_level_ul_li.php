@@ -128,18 +128,6 @@ function build_4_level_cat($arr){
     return $new_arr;
 }
 
-# We Need To Remove Empty Arr to Fix Empty Ul 
-
-function removeEmptyChildArrays(&$array) {
-    foreach ($array as $key => &$value) {
-        if (is_array($value)) {
-            removeEmptyChildArrays($value);
-            if (empty($value)) {
-                unset($array[$key]);
-            }
-        }
-    }
-}
 
 
 function build_4_ul_li_cat($new_arr){
