@@ -6,6 +6,7 @@
 
 <?php
 
+// https://stackoverflow.com/questions/9895130/recursively-remove-empty-elements-and-subarrays-from-a-multi-dimensional-array
 
 function removeEmptyValuesAndSubarrays($array){
    foreach($array as $k=>&$v){
