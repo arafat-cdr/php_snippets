@@ -69,3 +69,28 @@ $base_url_only = $url_arr['scheme'].'://'.$url_arr['host'].$url_arr['path'];
 
 ```
 
+### Php Modify a Php/Any File Programitically
+
+```php
+<?php
+
+// Adjust this path if your wp-config.php is in a different location
+$file_path = ABSPATH . 'wp-config.php'; 
+
+// Read the contents of the wp-config.php file
+$config_content = file_get_contents($file_path);
+
+$str_to_write = 'define("DISABLE_WP_CRON", true);';
+
+if (strpos($config_content, $str_to_write) !== false) {
+    echo "<br/>The line is already present in the string.";
+
+} else {
+    echo "<br/>The line is not present in the string.";
+    # Now Write Back the String
+    $config_data = str_replace( '<?php', '<?php'."\n\n".$str_to_write, $config_content);
+    file_put_contents($file_path, $config_data);
+}
+
+
+```
