@@ -62,12 +62,16 @@ echo "Current URL: " . $page_url;
 
 ```
 
-### Php Get Document Root *current url* **Base url**
+### Php Get --Document Root--current url -- Base url
+    ** Remember This should Write When The Server First Run
+    ** That means It should Go Inside Root/index.php
+    ** Other wise It will result False Positive
 
 ```php
 <?php
 
-function document_root(){
+
+public function document_root(){
 
     $documet_root = $_SERVER['DOCUMENT_ROOT'];
 
@@ -77,26 +81,50 @@ function document_root(){
     return $documet_root;
 }
 
-function current_url(){
+public function current_url(){
     $page_url  = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
     return $page_url;
 }
 
-function get_base_url(){
+public function get_base_url(){
 
-   // Get the protocol (HTTP or HTTPS)
-   $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+ // Get the document root
+ $documentRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
 
-   // Get the host (domain)
-   $host = $_SERVER['HTTP_HOST'];
+ // Get the directory of the current script
+ $currentDirectory = rtrim(__DIR__, '/');
 
-   // Concatenate the protocol, host, and optionally the port number
-   $baseURL = $protocol . '://' . $host;
+ // Check if the current directory is the same as the document root
+ if ($documentRoot === $currentDirectory) {
+    echo '<br/>  root <br/>';
+      // Get the protocol (HTTP or HTTPS)
+         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
 
-   return $baseURL;
+         // Get the host (domain)
+         $host = $_SERVER['HTTP_HOST'];
+
+         // Concatenate the protocol, host, and optionally the port number
+         $baseURL = $protocol . '://' . $host;
+
+         return $baseURL;
+ } else {
+    echo '<br/> subfolder <br/>';
+      // Get the current URL
+      $currentURL = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+      // Parse the URL
+      $urlParts = parse_url($currentURL);
+
+      // Reconstruct the base URL
+      $baseURL = $urlParts['scheme'] . '://' . $urlParts['host'] . dirname($urlParts['path']) . '/';
+
+     return $baseURL;
+ }
+
 
 }
+
 
 
 ```
