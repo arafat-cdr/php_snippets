@@ -46,6 +46,19 @@ file_put_contents($logFilePath, $str_to_log . PHP_EOL, FILE_APPEND);
 
 ```
 
+### How to get the File name only From deep folder
+
+```php
+<?php
+
+$str = 'some/folder/abc/right/img/66324b17.png';
+
+ // will return 66324b17.png  No matter how deep the folder is
+echo basename($str);
+
+```
+
+
 ### Php Get Current Url
 
 ```php
